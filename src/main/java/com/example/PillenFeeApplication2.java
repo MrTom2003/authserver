@@ -18,17 +18,37 @@ package com.example;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @SpringBootApplication
 @EnableResourceServer
+@EnableWebSecurity
 @Order(1000) 
 public class PillenFeeApplication2 extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PillenFeeApplication2.class, args);
 	}
+	
+	@Override
+    protected void configure(HttpSecurity http) throws Exception {
+//		
+//		 http.antMatcher("/**")                                     
+//		    .authorizeRequests()
+//		      .antMatchers("/", "/unsecuredContent**", "/oauth/token**").permitAll() 
+//		      .anyRequest().authenticated()                           
+//		      .and()
+//         .formLogin().permitAll();
+
+		http.authorizeRequests()
+		  .antMatchers("/", "/unsecuredContent**", "/oauth/token**").permitAll()
+		  .anyRequest().authenticated()
+          .and()
+          .formLogin().permitAll();
+    }
 
 }

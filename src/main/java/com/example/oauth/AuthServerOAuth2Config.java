@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @EnableAuthorizationServer
 public class AuthServerOAuth2Config
 extends AuthorizationServerConfigurerAdapter {
-	
+
 	@Autowired
 	@Qualifier("userDetailsService")
 	private UserDetailsService userDetailsService;
@@ -35,14 +35,20 @@ extends AuthorizationServerConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer configurer) throws Exception {
-		configurer.authenticationManager(authenticationManager);
-		configurer.userDetailsService(userDetailsService);
+	public void configure(AuthorizationServerEndpointsConfigurer oauthServer) throws Exception {
+		oauthServer.authenticationManager(authenticationManager);
+		oauthServer.userDetailsService(userDetailsService);
 	}
+
+
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("/securedContent").secret("secret").accessTokenValiditySeconds(expiration)
-				.scopes("read", "write").authorizedGrantTypes("password", "refresh_token").resourceIds("resource");
+		clients.inMemory() 
+        .withClient("client") 
+        .secret("clientpassword")
+        .scopes("read", "write") 
+        .authorizedGrantTypes("password")
+        .accessTokenValiditySeconds(3600);
 	}
 }
